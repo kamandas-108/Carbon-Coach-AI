@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carbon Coach AI</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: radial-gradient(circle at top right, #111827, #030712);
+            color: #f3f4f6;
+            overflow-x: hidden;
+        }
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.07);
+        }
+        .glow-green {
+            box-shadow: 0 0 30px rgba(16, 185, 129, 0.2);
+        }
+        .nav-link {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .page-section {
+            display: none;
+            animation: fadeIn 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        }
+        .page-section.active {
+            display: block;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .pulse-record {
+            animation: pulse 1.5s infinite;
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); }
+            70% { transform: scale(1.05); box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); }
+            100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between selection:bg-emerald-500 selection:text-white">
+
+    <nav class="glass-panel sticky top-0 z-50 px-6 py-4 border-b border-gray-800 backdrop-blur-md">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <div class="flex items-center space-x-3 cursor-pointer" onclick="navigateTo('home')">
+                <div class="h-10 w-10 bg-gradient-to-tr from-emerald-400 to-teal-600 rounded-xl flex items-center justify-center shadow-lg shadow-emerald-500/20">
+                    <i class="fa-solid fa-leaf text-xl text-white"></i>
+                </div>
+                <span class="text-xl font-bold tracking-wider bg-gradient-to-r from-emerald-400 via-teal-300 to-emerald-500 bg-clip-text text-transparent">
+                    Carbon Coach AI
+                </span>
+            </div>
+            
+            <div class="hidden md:flex items-center space-x-8">
+                <button onclick="navigateTo('home')" class="nav-link text-gray-300 hover:text-emerald-400 font-medium">Home</button>
+                <button onclick="navigateTo('calculator')" class="nav-link text-gray-300 hover:text-emerald-400 font-medium">Calculator</button>
+                <button onclick="navigateTo('coach')" class="nav-link text-gray-300 hover:text-emerald-400 font-medium">AI Coach</button>
+                <button onclick="navigateTo('dashboard')" class="nav-link text-gray-300 hover:text-emerald-400 font-medium">Dashboard</button>
+                <button onclick="navigateTo('about')" class="nav-link text-gray-300 hover:text-emerald-400 font-medium">About</button>
+            </div>
+
+            <div class="flex items-center space-x-4">
+                <span id="userBadge" class="hidden text-emerald-400 text-sm font-semibold glass-panel px-3 py-1.5 rounded-full"></span>
+                <button id="authBtn" onclick="openAuthModal()" class="px-5 py-2 bg-gradient-to-r from-emerald-500 to-teal-600 text-white rounded-xl font-semibold shadow-md shadow-emerald-500/10 hover:shadow-emerald-500/30 hover:scale-[1.02] active:scale-[0.98] transition-all">
+                    Sign In
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <main class="max-w-7xl mx-auto px-4 md:px-8 py-10 flex-grow w-full">
+        
+        <section id="home" class="page-section active space-y-12">
+            <div class="text-center max-w-3xl mx-auto space-y-6 pt-8">
+                <div class="inline-flex items-center space-x-2 bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 px-4 py-1.5 rounded-full text-sm font-medium tracking-wide">
+                    <i class="fa-solid fa-sparkles animate-pulse"></i>
+                    <span>Empowered by Next-Gen AI Insights</span>
+                </div>
+                <h1 class="text-5xl md:text-6xl font-extrabold tracking-tight leading-none text-white">
+                    Decarbonize Your Life with <span class="bg-gradient-to-r from-emerald-400 to-teal-300 bg-clip-text text-transparent">Intelligent Coaching</span>
+                </h1>
+                <p class="text-gray-400 text-lg md:text-xl font-light leading-relaxed">
+                    Track your carbon footprint metrics, generate dynamic optimizations powered by AI models, and accomplish eco-challenges effortlessly.
+                </p>
+                <div class="pt-4 flex flex-wrap justify-center gap-4">
+                    <button onclick="navigateTo('calculator')" class="px-8 py-4 bg-gradient-to-r from-emerald-500 to-teal-600 text-white rounded-2xl font-bold glow-green hover:scale-[1.03] transition-transform">
+                        Calculate Footprint <i class="fa-solid fa-arrow-right ml-2"></i>
+                    </button>
+                    <button onclick="navigateTo('coach')" class="px-8 py-4 glass-panel text-white hover:bg-white/5 rounded-2xl font-bold transition-colors">
+                        Consult AI Coach
+                    </button>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6 pt-10">
+                <div class="glass-panel p-6 rounded-2xl transition-all hover:border-emerald-500/40">
+                    <i class="fa-solid fa-calculator text-3xl text-emerald-400 mb-4"></i>
+                    <h3 class="text-lg font-semibold mb-2">Footprint Engine</h3>
+                    <p class="text-gray-400 text-sm">Analyze your travel patterns, monthly utility profiles, and dynamic retail footprints.</p>
+                </div>
+                <div class="glass-panel p-6 rounded-2xl transition-all hover:border-emerald-500/40">
+                    <i class="fa-solid fa-brain text-3xl text-teal-400 mb-4"></i>
+                    <h3 class="text-lg font-semibold mb-2">AI Optimization</h3>
+                    <p class="text-gray-400 text-sm">Hyper-targeted, context-aware reduction strategies custom mapped to your structural habits.</p>
+                </div>
+                <div class="glass-panel p-6 rounded-2xl transition-all hover:border-emerald-500/40">
+                    <i class="fa-solid fa-bullseye text-3xl text-emerald-400 mb-4"></i>
+                    <h3 class="text-lg font-semibold mb-2">Adaptive Trackers</h3>
+                    <p class="text-gray-400 text-sm">Real-time status tracking against your modular target reduction bounds.</p>
+                </div>
+                <div class="glass-panel p-6 rounded-2xl transition-all hover:border-emerald-500/40">
+                    <i class="fa-solid fa-trophy text-3xl text-teal-400 mb-4"></i>
+                    <h3 class="text-lg font-semibold mb-2">Eco Challenges</h3>
+                    <p class="text-gray-400 text-sm">Dynamic gamified micro-challenges refreshed dynamically by AI pipelines.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="calculator" class="page-section max-w-3xl mx-auto">
+            <div class="glass-panel p-8 rounded-3xl space-y-8">
+                <div>
+                    <h2 class="text-3xl font-bold text-white mb-2">Carbon Footprint Engine</h2>
+                    <p class="text-gray-400">Fill in your basic monthly lifestyle data to calibrate your environmental impact metrics.</p>
+                </div>
+                <form id="calcForm" class="space-y-6" onsubmit="handleCalculate(event)">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-300 mb-2">Car Travel (km / month)</label>
+                            <input type="number" id="calcCar" class="w-full bg-gray-950 border border-gray-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-emerald-500 transition-colors" placeholder="0">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-300 mb-2">Motorbike / Scooter (km / month)</label>
+                            <input type="number" id="calcBike" class="w-full bg-gray-950 border border-gray-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-emerald-500 transition-colors" placeholder="0">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-300 mb-2">Bus Commuting (km / month)</label>
+                            <input type="number" id="calcBus" class="w-full bg-gray-950 border border-gray-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-emerald-500 transition-colors" placeholder="0">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-300 mb-2">Rail / Train (km / month)</label>
+                            <input type="number" id="calcTrain" class="w-full bg-gray-950 border border-gray-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-emerald-500 transition-colors" placeholder="0">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-300 mb-2">Flights / Air travel (hours / month)</label>
+                            <input type="number" id="calcFlight" class="w-full bg-gray-950 border border-gray-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-emerald-500 transition-colors" placeholder="0">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-300 mb-2">Electricity Usage (kWh / month)</label>
+                            <input type="number" id="calcElectricity" class="w-full bg-gray-950 border border-gray-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-emerald-500 transition-colors" placeholder="0">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-300 mb-2">Retail & Shopping Frequency</label>
+                        <select id="calcShopping" class="w-full bg-gray-950 border border-gray-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-emerald-500 transition-colors">
+                            <option value="low">Minimalist (Rarely buy new products)</option>
+                            <option value="average" selected>Average (Regular consumer goods purchase)</option>
+                            <option value="high">Frequent consumer (High volume fast fashion/tech)</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="w-full py-4 bg-gradient-to-r from-emerald-500 to-teal-600 rounded-xl font-bold text-white shadow-lg shadow-emerald-500/20 hover:scale-[1.01] transition-transform">
+                        Evaluate Footprint Matrix
+                    </button>
+                </form>
+
+                <div id="calcResult" class="hidden p-6 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 text-center space-y-3">
+                    <p class="text-sm font-semibold tracking-wide uppercase text-emerald-400">Calculated Emissions</p>
+                    <h3 class="text-4xl font-extrabold text-white"><span id="emissionsValue">0.0</span> <span class="text-xl font-medium text-gray-400">kg CO₂e / month</span></h3>
+                    <div class="pt-2">
+                        <button onclick="navigateTo('coach')" class="px-5 py-2.5 bg-emerald-500 text-white rounded-xl text-sm font-bold shadow-md hover:bg-emerald-600 transition-colors">
+                            Forward Metrics to AI Coach <i class="fa-solid fa-angle-right ml-1"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="coach" class="page-section max-w-4xl mx-auto space-y-8">
+            <div class="glass-panel p-8 rounded-3xl space-y-6">
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                    <div>
+                        <h2 class="text-3xl font-bold text-white mb-1">AI Personalized Insights</h2>
+                        <p class="text-gray-400">Context-sensitive actionable optimization plans rendered dynamically.</p>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <button id="voiceBtn" onclick="toggleVoiceInput()" class="px-4 py-2.5 bg-gray-900 border border-gray-800 hover:border-red-500 rounded-xl text-sm font-semibold text-gray-300 flex items-center space-x-2 transition-all">
+                            <i id="voiceIcon" class="fa-solid fa-microphone text-emerald-400"></i>
+                            <span id="voiceText">Voice Input</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="space-y-2">
+                    <label class="block text-sm font-medium text-gray-300">Contextual updates / specific structural limitations:</label>
+                    <textarea id="coachContext" rows="3" class="w-full bg-gray-950 border border-gray-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-emerald-500 transition-colors" placeholder="Example: I drive to work daily but can bike on weekends. I also have standard solar arrays installed..."></textarea>
+                </div>
+
+                <button onclick="generateAiTips()" class="px-6 py-3.5 bg-gradient-to-r from-emerald-500 to-teal-600 rounded-xl font-bold text-white flex items-center space-x-2 shadow-lg shadow-emerald-500/10 hover:scale-[1.01] transition-transform">
+                    <i class="fa-solid fa-wand-magic-sparkles"></i>
+                    <span>Compile AI Optimization Plan</span>
+                </button>
+
+                <div id="coachLoader" class="hidden flex items-center justify-center py-10">
+                    <div class="animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-emerald-500"></div>
+                </div>
+
+                <div id="tipsContainer" class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4">
+                    <div class="p-5 rounded-2xl glass-panel border-l-4 border-emerald-500 flex items-start space-x-3">
+                        <i class="fa-solid fa-circle-check text-emerald-400 mt-1"></i>
+                        <p class="text-gray-300 text-sm">Submit your carbon metrics using the calculator to view dynamically updated personalized optimization blueprints here.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="dashboard" class="page-section space-y-8">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="glass-panel p-6 rounded-2xl flex flex-col justify-between">
+                    <div>
+                        <p class="text-sm font-medium text-gray-400 mb-1">Current Base Footprint</p>
+                        <h4 class="text-3xl font-extrabold text-white"><span id="dashFootprint">0.0</span> <span class="text-sm text-gray-500 font-normal">kg CO₂e</span></h4>
+                    </div>
+                    <i class="fa-solid fa-chart-simple text-4xl text-emerald-500/20 self-end mt-4"></i>
+                </div>
+                <div class="glass-panel p-6 rounded-2xl space-y-4">
+                    <div>
+                        <p class="text-sm font-medium text-gray-400 mb-1">Target Reduction Goal</p>
+                        <h4 class="text-3xl font-extrabold text-emerald-400"><span id="dashGoalText">0</span>%</h4>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <input type="number" id="goalInput" class="w-20 bg-gray-950 border border-gray-800 rounded-lg px-2 py-1 text-sm text-white focus:outline-none focus:border-emerald-500" placeholder="20">
+                        <button onclick="updateGoal()" class="text-xs bg-emerald-500 hover:bg-emerald-600 text-white px-3 py-1.5 rounded-lg font-bold transition-colors">Set Bound</button>
+                    </div>
+                </div>
+                <div class="glass-panel p-6 rounded-2xl flex flex-col justify-between">
+                    <div>
+                        <p class="text-sm font-medium text-gray-400 mb-1">Accomplished Eco Challenges</p>
+                        <h4 class="text-3xl font-extrabold text-teal-400"><span id="dashChallenges">0</span> completed</h4>
+                    </div>
+                    <i class="fa-solid fa-medal text-4xl text-teal-500/20 self-end mt-4"></i>
+                </div>
+            </div>
+
+            <div class="glass-panel p-6 rounded-3xl space-y-4">
+                <div class="flex justify-between items-center">
+                    <h3 class="font-bold text-lg text-white">Target Tracking Status</h3>
+                    <span class="text-sm text-gray-400 font-medium">Estimated CO₂ Offset: <strong class="text-emerald-400" id="dashSavedCo2">0.0</strong> kg</span>
+                </div>
+                <div class="w-full bg-gray-950 rounded-full h-4 overflow-hidden border border-gray-800">
+                    <div id="dashProgressBar" class="bg-gradient-to-r from-emerald-500 to-teal-400 h-full w-[0%] transition-all duration-500"></div>
+                </div>
+            </div>
+
+            <div class="glass-panel p-8 rounded-3xl space-y-6">
+                <div class="flex justify-between items-center">
+                    <div>
+                        <h3 class="text-xl font-bold text-white">Dynamic AI Eco Challenges</h3>
+                        <p class="text-sm text-gray-400">Complete challenges to track performance enhancements real-time.</p>
+                    </div>
+                    <button onclick="fetchChallenges()" class="p-2.5 bg-gray-900 border border-gray-800 hover:border-emerald-500 rounded-xl text-gray-300 transition-colors">
+                        <i class="fa-solid fa-arrows-rotate"></i>
+                    </button>
+                </div>
+
+                <div id="challengesContainer" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    </div>
+            </div>
+        </section>
+
+        <section id="about" class="page-section max-w-3xl mx-auto text-center space-y-8">
+            <div class="glass-panel p-10 rounded-3xl space-y-6">
+                <div class="h-16 w-16 bg-gradient-to-tr from-emerald-400 to-teal-600 rounded-2xl flex items-center justify-center mx-auto shadow-lg shadow-emerald-500/20">
+                    <i class="fa-solid fa-earth-americas text-3xl text-white"></i>
+                </div>
+                <h2 class="text-3xl font-bold text-white">System Protocol & Parameters</h2>
+                <p class="text-gray-400 leading-relaxed font-light text-left">
+                    <strong>Carbon Coach AI</strong> bridges intelligent microservices and sustainable habits architecture. Leveraging advanced capabilities of the <code>gemini-2.5-flash</code> models configured via standard pipelines alongside persistent Neon PostgreSQL relational infrastructure, the platform transforms computational lifestyle profiles into highly localized optimization workflows.
+                </p>
+                <div class="border-t border-gray-800/60 pt-6 text-sm text-gray-500 text-left space-y-2">
+                    <p><i class="fa-solid fa-code text-emerald-500/70 mr-2"></i><strong>Engine:</strong> Flask Micro-Architecture (Python 3.11.9)</p>
+                    <p><i class="fa-solid fa-database text-emerald-500/70 mr-2"></i><strong>Data Storage:</strong> Neon Serverless PostgreSQL instances</p>
+                    <p><i class="fa-solid fa-microchip text-emerald-500/70 mr-2"></i><strong>AI Core Model:</strong> Google Generative AI (SDK Platform Integration)</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <div id="authModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+        <div class="glass-panel w-full max-w-md p-8 rounded-3xl space-y-6 relative animate-[fadeIn_0.3s_ease-out]">
+            <button onclick="closeAuthModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white">
+                <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
+            <div class="text-center">
+                <h3 id="modalTitle" class="text-2xl font-bold text-white">Access Carbon Coach Portal</h3>
+                <p class="text-sm text-gray-400 mt-1">Authenticate data synchronizations over Neon DB structures</p>
+            </div>
+            
+            <form id="authForm" onsubmit="handleAuthSubmit(event)" class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-300 mb-1.5">Username / Identity</label>
+                    <input type="text" id="authUser" required class="w-full bg-gray-950 border border-gray-800 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:border-emerald-500" placeholder="ecowarrior">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-300 mb-1.5">Secure Password</label>
+                    <input type="password" id="authPass" required class="w-full bg-gray-950 border border-gray-800 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:border-emerald-500" placeholder="••••••••">
+                </div>
+                <button type="submit" id="authSubmitBtn" class="w-full py-3 bg-gradient-to-r from-emerald-500 to-teal-600 rounded-xl font-bold text-white shadow-md hover:scale-[1.01] transition-transform">
+                    Proceed Validation
+                </button>
+            </form>
+
+            <div class="text-center text-xs text-gray-400">
+                <span id="authToggleText">New to the engine?</span>
+                <button onclick="toggleAuthMode()" id="authToggleBtn" class="text-emerald-400 hover:underline ml-1 font-semibold">Create an profile Account</button>
+            </div>
+        </div>
+    </div>
+
+    <footer class="glass-panel border-t border-gray-800/80 px-6 py-8 mt-16 text-xs text-gray-400 tracking-wide">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
+            <div class="flex items-center space-x-2">
+                <span class="font-semibold text-emerald-400">Carbon Coach AI</span>
+                <span>— Developed and deployed by Kaman Das ©2026</span>
+            </div>
+            <div class="flex items-center space-x-1 text-gray-500">
+                <span>Made with Love</span>
+                <i class="fa-solid fa-heart text-red-500 mx-0.5 animate-pulse"></i>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        let currentTab = 'home';
+        let currentAuthMode = 'login'; 
+        let currentFootprintMemory = 0;
+        let speechRecognitionInstance = null;
+        let isRecordingVoice = false;
+
+        // Initialize App State
+        window.addEventListener('DOMContentLoaded', () => {
+            checkAuthStatus();
+            fetchDashboardData();
+            fetchChallenges();
+        });
+
+        function navigateTo(targetId) {
+            document.querySelectorAll('.page-section').forEach(section => section.classList.remove('active'));
+            const activeSection = document.getElementById(targetId);
+            if(activeSection) activeSection.classList.add('active');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Authentication Window Handling
+        function openAuthModal() {
+            const btnText = document.getElementById('authBtn').innerText.trim();
+            if(btnText === 'Sign Out') {
+                handleLogout();
+                return;
+            }
+            document.getElementById('authModal').classList.remove('hidden');
+        }
+        function closeAuthModal() {
+            document.getElementById('authModal').classList.add('hidden');
+        }
+        function toggleAuthMode() {
+            if(currentAuthMode === 'login') {
+                currentAuthMode = 'signup';
+                document.getElementById('modalTitle').innerText = 'Create Profile System';
+                document.getElementById('authSubmitBtn').innerText = 'Register Credentials';
+                document.getElementById('authToggleText').innerText = 'Already have an identifier profile?';
+                document.getElementById('authToggleBtn').innerText = 'Log In instead';
+            } else {
+                currentAuthMode = 'login';
+                document.getElementById('modalTitle').innerText = 'Access Carbon Coach Portal';
+                document.getElementById('authSubmitBtn').innerText = 'Proceed Validation';
+                document.getElementById('authToggleText').innerText = 'New to the engine?';
+                document.getElementById('authToggleBtn').innerText = 'Create an profile Account';
+            }
+        }
+
+        async function checkAuthStatus() {
+            try {
+                const res = await fetch('/api/auth/status');
+                const data = await res.json();
+                const authBtn = document.getElementById('authBtn');
+                const badge = document.getElementById('userBadge');
+                if(data.logged_in) {
+                    authBtn.innerText = 'Sign Out';
+                    badge.innerText = `@${data.username}`;
+                    badge.classList.remove('hidden');
+                } else {
+                    authBtn.innerText = 'Sign In';
+                    badge.classList.add('hidden');
+                }
+            } catch(e) { console.error("Auth sync error", e); }
+        }
+
+        async function handleAuthSubmit(e) {
+            e.preventDefault();
+            const username = document.getElementById('authUser').value;
+            const password = document.getElementById('authPass').value;
+            const targetUrl = currentAuthMode === 'login' ? '/api/auth/login' : '/api/auth/signup';
+
+            try {
+                const response = await fetch(targetUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, password })
+                });
+                const data = await response.json();
+                if(data.error) {
+                    alert(`Authentication Error: ${data.error}`);
+                } else {
+                    closeAuthModal();
+                    checkAuthStatus();
+                    fetchDashboardData();
+                }
+            } catch(err) { alert("Backend validation request failed."); }
+        }
+
+        async function handleLogout() {
+            await fetch('/api/auth/logout', { method: 'POST' });
+            checkAuthStatus();
+            fetchDashboardData();
+        }
+
+        // Carbon Evaluation Logic Engine
+        async function handleCalculate(e) {
+            e.preventDefault();
+            const payload = {
+                car: document.getElementById('calcCar').value,
+                bike: document.getElementById('calcBike').value,
+                bus: document.getElementById('calcBus').value,
+                train: document.getElementById('calcTrain').value,
+                flight: document.getElementById('calcFlight').value,
+                electricity: document.getElementById('calcElectricity').value,
+                shopping: document.getElementById('calcShopping').value
+            };
+
+            const res = await fetch('/api/carbon/calculate', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+            const data = await res.json();
+            currentFootprintMemory = data.footprint;
+            document.getElementById('emissionsValue').innerText = data.footprint;
+            document.getElementById('calcResult').classList.remove('hidden');
+            fetchDashboardData();
+        }
+
+        // Generative AI Pipeline Handlers
+        async function generateAiTips() {
+            document.getElementById('coachLoader').classList.remove('hidden');
+            const tipsContainer = document.getElementById('tipsContainer');
+            tipsContainer.innerHTML = '';
+
+            const context = document.getElementById('coachContext').value;
+            const res = await fetch('/api/ai/coach', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ footprint: currentFootprintMemory, context })
+            });
+            const data = await res.json();
+            document.getElementById('coachLoader').classList.add('hidden');
+
+            data.tips.forEach(tip => {
+                const el = document.createElement('div');
+                el.className = "p-5 rounded-2xl glass-panel border-l-4 border-emerald-500 flex items-start space-x-3 transition-all hover:scale-[1.01]";
+                el.innerHTML = `
+                    <i class="fa-solid fa-sparkles text-emerald-400 mt-1"></i>
+                    <p class="text-gray-200 text-sm leading-relaxed">${tip}</p>
+                `;
+                tipsContainer.appendChild(el);
+            });
+        }
+
+        async function fetchChallenges() {
+            const container = document.getElementById('challengesContainer');
+            container.innerHTML = '<div class="col-span-2 text-center text-sm text-gray-500 animate-pulse">AI is generating challenges...</div>';
+            
+            try {
+                const res = await fetch('/api/ai/challenges');
+                const data = await res.json();
+                container.innerHTML = '';
+                
+                data.challenges.forEach(challenge => {
+                    const el = document.createElement('div');
+                    el.className = "p-5 rounded-2xl glass-panel flex justify-between items-center gap-4 transition-all hover:border-teal-500/20";
+                    el.innerHTML = `
+                        <div class="flex items-start space-x-3">
+                            <i class="fa-solid fa-bolt text-teal-400 mt-1"></i>
+                            <span class="text-sm text-gray-200">${challenge}</span>
+                        </div>
+                        <button onclick="completeChallenge(this)" class="px-3 py-1.5 bg-teal-500/10 hover:bg-teal-500 text-teal-400 hover:text-white rounded-xl text-xs font-bold transition-all shrink-0">
+                            Complete
+                        </button>
+                    `;
+                    container.appendChild(el);
+                });
+            } catch(e) { container.innerHTML = '<p class="text-xs text-red-400">Error connecting with generative backend model loops.</p>'; }
+        }
+
+        async function completeChallenge(btn) {
+            btn.disabled = true;
+            btn.innerText = "Logged ✔";
+            btn.className = "px-3 py-1.5 bg-gray-800 text-gray-500 rounded-xl text-xs font-bold shrink-0 cursor-not-allowed";
+            await fetch('/api/dashboard/complete-challenge', { method: 'POST' });
+            fetchDashboardData();
+        }
+
+        // Progress Tracking Pipeline Configuration
+        async function fetchDashboardData() {
+            const res = await fetch('/api/dashboard/data');
+            const data = await res.json();
+
+            document.getElementById('dashFootprint').innerText = data.footprint;
+            document.getElementById('dashGoalText').innerText = data.goal_reduction;
+            document.getElementById('dashChallenges').innerText = data.challenges_completed;
+
+            // Calculate metrics math loops
+            const reductionRatio = parseFloat(data.goal_reduction || 0) / 100.0;
+            const savedCo2 = data.footprint * reductionRatio;
+            document.getElementById('dashSavedCo2').innerText = savedCo2.toFixed(2);
+
+            // Dynamically scale progress meter bars visually
+            const capPercentage = Math.min((data.challenges_completed * 20), 100); 
+            document.getElementById('dashProgressBar').style.width = `${capPercentage}%`;
+        }
+
+        async function updateGoal() {
+            const goalVal = document.getElementById('goalInput').value;
+            await fetch('/api/dashboard/update-goal', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ goal: goalVal })
+            });
+            fetchDashboardData();
+        }
+
+        // Web Speech Feature Core API implementation loop
+        function toggleVoiceInput() {
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            if (!SpeechRecognition) {
+                alert("Web Speech System architecture is not supported on this browser version. Consider Chrome/Edge.");
+                return;
+            }
+
+            if (!speechRecognitionInstance) {
+                speechRecognitionInstance = new SpeechRecognition();
+                speechRecognitionInstance.continuous = false;
+                speechRecognitionInstance.lang = 'en-US';
+                speechRecognitionInstance.interimResults = false;
+
+                speechRecognitionInstance.onstart = () => {
+                    isRecordingVoice = true;
+                    document.getElementById('voiceBtn').classList.add('pulse-record', 'border-red-500');
+                    document.getElementById('voiceIcon').className = "fa-solid fa-circle text-red-500 animate-ping";
+                    document.getElementById('voiceText').innerText = "Listening...";
+                };
+
+                speechRecognitionInstance.onresult = (event) => {
+                    const transcript = event.results[0][0].transcript;
+                    document.getElementById('coachContext').value += (document.getElementById('coachContext').value ? " " : "") + transcript;
+                };
+
+                speechRecognitionInstance.onerror = (e) => { console.error("Speech Error Status", e); stopRecordingInterface(); };
+                speechRecognitionInstance.onend = () => { stopRecordingInterface(); };
+            }
+
+            if (!isRecordingVoice) {
+                speechRecognitionInstance.start();
+            } else {
+                speechRecognitionInstance.stop();
+            }
+        }
+
+        function stopRecordingInterface() {
+            isRecordingVoice = false;
+            document.getElementById('voiceBtn').classList.remove('pulse-record', 'border-red-500');
+            document.getElementById('voiceIcon').className = "fa-solid fa-microphone text-emerald-400";
+            document.getElementById('voiceText').innerText = "Voice Input";
+        }
+    </script>
+</body>
+</html>
